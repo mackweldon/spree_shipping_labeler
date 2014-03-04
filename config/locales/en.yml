@@ -1,0 +1,5 @@
+en:
+  spree:
+    order_number: "Order Number"
+    recently_viewed:
+      header: "Recently Viewed"

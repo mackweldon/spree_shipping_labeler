@@ -1,0 +1,92 @@
+-# Header
+- content_for :js_onready do
+  :plain
+    WorkingTitle.OrderShipments.initialize()
+
+= render :partial => 'spree/admin/shared/order_tabs', :locals => { :current => 'Shipment' } 
+
+= content_for :page_title do
+  %i.icon-arrow-right
+  Print Labels
+
+-# Body
+= content_for :page_actions do
+  %li
+    = button_link_to Spree.t(:back_to_orders_list), admin_orders_path, :icon => 'icon-arrow-left'
+
+- order.shipments.each do |shipment|
+  - method_id = shipment.shipping_method.id rescue nil
+  .shipment-package-form{ data: { method_id: method_id} }
+    %h4{ align: "center" } Shipment #{shipment.number}
+    %fieldset.no-border-bottom
+      %legend{ align: "center" }
+        #{shipment.shipping_method.name rescue "No shipping method"}
+        -
+        to
+        - printer_name = spree_current_user.label_printer_name || "No printer configured"
+        = link_to "[#{printer_name}]", edit_user_path(spree_current_user)
+        - if shipment.ready? and can? :update, shipment
+          = '-'
+          - token = spree_current_user.spree_api_key
+          = link_to 'Ship', ship_api_order_shipment_path(order, shipment, token: token),
+            method: :put, class: %w[button icon-arrow-right],
+            remote: true,
+            class:  %w[finalize-shipment-button icon-arrow-right button]
+
+    = nested_form_for shipment, url: { action: "update", shipment_number: shipment.number } do |f|
+      %fieldset.no-border-top
+        %table{ id: "packages-#{shipment.number}" }
+          %thead
+            %tr
+              %th.shipping-method-column
+                Method
+              %th
+                Box type
+              %th
+                Weight (lbs)
+              %th
+                Tracking #
+
+          = f.fields_for :packages, wrapper: false do |package_form|
+            - obj = package_form.object
+            %tr.fields
+              %td.shipping-method-column
+                - suggested_method = obj.shipping_method || shipment.shipping_method
+                - if suggested_method
+                  - select_options = options_for_select(Spree::ShippingMethod.all.map { |m| [m.name, m.id] }, suggested_method.id )
+                - else
+                  - select_options = options_for_select(Spree::ShippingMethod.all.map { |m| [m.name, m.id] })
+
+                = package_form.select(:shipping_method_id, select_options, include_blank: true)
+              %td
+                = package_form.select(:box_id, Spree::Shipping::Box.all.map { |b| [b.description, b.id] })
+              %td.weight-column
+                = package_form.text_field :weight
+              %td
+                - if (trk = obj.tracking_number) && (meth = obj.shipping_method)
+                  - url = meth.build_tracking_url(trk) 
+                  = label_tag(:tracking_number, link_to(trk, url))
+                - else
+                  = label_tag(:tracking_number, 'n/a')
+              %td.actions
+                - if obj
+                  - if spree_current_user.label_printer_name.present?
+                    =link_to("", print_admin_order_shipments_path(package_id: obj.id),
+                      method: :post, remote: true, class: %w[icon-print no-text with-tip])
+                  - else
+                    =link_to("", "javascript:alert('#{Spree.t(:no_label_printer_yet)}')",
+                      class: %w[red icon-print no-text with-tip])
+
+                = package_form.link_to_remove("", class: ["delete_item", "icon-trash", "no-text", "with-tip"])
+
+        %span.offset-by-one
+          = f.link_to_add(" Add a package",
+            :packages, data: { target: "#packages-#{shipment.number}" }, class: 'icon-plus')
+
+        .form-buttons.filter-actions.actions
+          %button.button.icon-refresh{ type: 'submit'}
+            Update
+          %span.or
+            =Spree.t(:or)
+          = link_to_with_icon 'icon-remove', Spree.t('actions.cancel'),
+            edit_admin_order_path(shipment.order), class: 'button'

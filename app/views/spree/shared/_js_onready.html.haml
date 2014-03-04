@@ -1,0 +1,16 @@
+:javascript
+  var console = window.console || { log: function(){} };
+
+- if content_for?(:js_onready)
+  - escaped_js   = content_for(:js_onready)
+  - unescaped_js = escaped_js.gsub("&amp;&amp;", "&&")
+
+  :javascript
+    $(function() {
+      console.log("** Beginning sitewide :js_onready **");
+      #{unescaped_js}
+      console.log("** Sitewide :js_onready ended. **");
+    });
+- else
+  :javascript
+    console.log("** No :js_onready code received **")
