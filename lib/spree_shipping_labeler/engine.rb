@@ -3,9 +3,9 @@ end
 module SpreeShippingLabelerExtension
   class Engine < Rails::Engine
 
-    initializer "spree.active_shipping.preferences", :before => :load_config_initializers do |app|
-      Spree::ShippingLabeler::Config = Spree::ShippingLabelerConfiguration.new
-    end
+    #initializer "spree.active_shipping.preferences", :before => :load_config_initializers do |app|
+      #Spree::ShippingLabeler::Config = Spree::ShippingLabelerConfiguration.new
+    #end
 
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), "../../app/**/*_decorator*.rb")) do |c|
@@ -29,12 +29,12 @@ module SpreeShippingLabelerExtension
     #end
 
         # sets the manifests / assets to be precompiled, even when initialize_on_precompile is false
-    initializer "spree.assets.precompile", :group => :all do |app|
-      app.config.assets.precompile += %w[
-        admin/product_packages/new.js
-        admin/product_packages/edit.js
-        admin/product_packages/index.js
-      ]
-    end
+    #initializer "spree.assets.precompile", :group => :all do |app|
+      #app.config.assets.precompile += %w[
+        #admin/product_packages/new.js
+        #admin/product_packages/edit.js
+        #admin/product_packages/index.js
+      #]
+    #end
   end
 end
