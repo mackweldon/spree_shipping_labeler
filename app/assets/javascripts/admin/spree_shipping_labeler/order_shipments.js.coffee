@@ -1,4 +1,4 @@
-WorkingTitle.OrderShipments ||=
+SpreeShippingLabeler.OrderShipments ||=
   initialize: ->
     @selectifyForm()
     @bindHandlers()

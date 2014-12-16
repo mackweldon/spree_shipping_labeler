@@ -17,7 +17,8 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
 
-  s.add_dependency('spree_core', '~> 2.0.0')
+  s.add_dependency('spree_core',   '~> 2.0.0')
+  s.add_dependency('coffee-rails', '~> 3.2.2')
 
   s.add_development_dependency 'pry'
   s.add_development_dependency 'webmock'
