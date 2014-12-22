@@ -8,9 +8,9 @@ Gem::Specification.new do |s|
   s.authors     = ["Daniel Pritchett"]
   s.email       = 'dpritchett@gmail.com'
   s.homepage    = 'http://github.com/coroutine/spree_shipping_labeler'
-  s.summary     = 'Spree extension for providing shipping labels for FedEx shipments'
-  s.description = 'Spree extension for providing shipping labels for FedEx shipments'
-  s.required_ruby_version = '>= 1.8.7'
+  s.summary     = 'Spree extension for providing shipping and return labels for FedEx shipments'
+  s.description = 'Spree extension for providing shipping and return labels for FedEx shipments'
+  s.required_ruby_version = '>= 1.9.3'
   s.rubygems_version      = '1.3.6'
 
   s.files         = `git ls-files`.split("\n")
@@ -22,5 +22,14 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'pry'
   s.add_development_dependency 'webmock'
+  s.add_development_dependency 'capybara', '~> 2.0'
+  s.add_development_dependency 'database_cleaner', '~> 1.0.1'
+  s.add_development_dependency 'factory_girl', '~> 4.2'
+  s.add_development_dependency 'ffaker'
+  s.add_development_dependency 'rspec-rails',  '~> 2.13'
+  s.add_development_dependency 'sass-rails'
+  s.add_development_dependency 'selenium-webdriver'
+  s.add_development_dependency 'shoulda-matchers', '>= 1.5.4'
   s.add_development_dependency 'simplecov'
+  s.add_development_dependency 'sqlite3'
 end

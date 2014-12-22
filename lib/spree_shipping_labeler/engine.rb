@@ -14,6 +14,7 @@ module SpreeShippingLabelerExtension
     end
 
     config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += %W(#{config.root}/lib/utilities)
     config.to_prepare &method(:activate).to_proc
 
     #initializer "spree_active_shipping.register.calculators" do |app|

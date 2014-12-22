@@ -1,6 +1,0 @@
-<!-- insert_after "nav.menu li:first" -->
-<li<%== ' class="active"' if current == 'Shipment' %>>
-  <a class="icon_link with-tip icon-truck" href="<%= edit_admin_order_shipments_path(@order) %>">
-    <span class="text">Shipping &amp; Labels</span>
-  </a>
-</li>

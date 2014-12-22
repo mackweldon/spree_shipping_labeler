@@ -1,11 +1,8 @@
 Spree::Core::Engine.routes.draw do
-  namespace :admin do
-    resources :orders do
-      resource :shipment, :controller => "orders/shipments", :only => [:update, :edit, :show, :print] do
-        member do
-          post :print
-          post :print_product_labels
-        end
+  namespace :api do
+    resources :return_authorizations do
+      member do
+        put :print_label
       end
     end
   end

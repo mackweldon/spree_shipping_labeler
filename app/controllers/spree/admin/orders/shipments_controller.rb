@@ -2,8 +2,6 @@ module Spree
   module Admin
     module Orders
       class ShipmentsController < Spree::Admin::BaseController
-        expose(:order)    { @order }
-
         before_filter :load_ivars
 
         rescue_from Utilities::LabelError do |err|

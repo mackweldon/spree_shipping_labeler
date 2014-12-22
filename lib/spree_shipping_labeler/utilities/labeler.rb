@@ -41,7 +41,7 @@ module Utilities
 
       mappings.fetch(name)
     end
-    
+
     #######################
     # Private Instance Methods
     #######################

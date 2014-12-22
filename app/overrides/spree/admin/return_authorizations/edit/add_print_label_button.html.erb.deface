@@ -1,0 +1,7 @@
+<!-- insert_before ".icon-arrow-right"
+
+     enabled -->
+
+<% 'I would really like to have found a better selector to hook into here...' %>
+
+<%= render partial: 'print_label', :locals => { :current => 'Return Authorizations' } %>

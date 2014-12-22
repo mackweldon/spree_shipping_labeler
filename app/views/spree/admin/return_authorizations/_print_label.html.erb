@@ -1,0 +1,5 @@
+<% content_for :page_actions do %>
+  <li>
+    <%= button_link_to Spree.t(:print_return_label), print_label_api_return_authorization_path(@return_authorization), :method => :put, :data => { :confirm => Spree.t(:are_you_sure) }, :icon => 'icon-print', id: 'return-label-button' %>
+</li>
+<% end %>
