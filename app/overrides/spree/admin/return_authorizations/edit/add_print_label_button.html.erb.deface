@@ -1,4 +1,4 @@
-<!-- insert_before "script:first"
+<!-- insert_before "code[erb-loud]:contains('order_tabs')"
 
      enabled -->
 
