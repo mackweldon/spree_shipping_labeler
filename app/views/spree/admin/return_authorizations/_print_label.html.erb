@@ -1,5 +1,10 @@
-<% content_for :page_actions do %>
-  <li>
-    <%= button_link_to Spree.t(:print_return_label), print_label_api_return_authorization_path(@return_authorization), :method => :put, :data => { :confirm => Spree.t(:are_you_sure) }, :icon => 'icon-print', id: 'return-label-button' %>
-</li>
-<% end %>
+<fieldset>
+  <legend>Shipping Labels</legend>
+  <%= button_to Spree.t(:generate_new_label), print_label_api_return_authorization_path(@return_authorization), remote: true, method: :post, class: 'icon-print', id: 'return-label-button' %>
+
+  <ul>
+    <% @return_authorization.labels.each do |label| %>
+      <li><%= label.id rescue 'a label?' %></li>
+  <% end %>
+  </ul>
+</fieldset>

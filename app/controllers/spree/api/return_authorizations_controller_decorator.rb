@@ -1,6 +1,5 @@
 Spree::Api::ReturnAuthorizationsController.class_eval do
   def print_label
-    @return_authorization = order.return_authorizations.find(params[:id])
-    binding.pry
+    @return_authorization = Spree::ReturnAuthorization.find(params[:id])
   end
 end
