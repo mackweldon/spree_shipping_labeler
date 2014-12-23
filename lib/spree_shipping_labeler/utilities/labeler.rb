@@ -7,7 +7,7 @@ module Utilities
   class LabelError < Exception; end
 
   class Labeler
-    attr_reader :package
+    attr_reader :return_label
     def initialize(pkg=nil)
       @package = pkg
     end
@@ -15,11 +15,7 @@ module Utilities
     # Create a shipping label for a given package. Supports Fedex
     #
     def generate
-      if package.fedex?
-        fedex_generate
-      else
-        raise LabelError, "Shipping method does not have a valid label generator!"
-      end
+      fedex_generate
     end
 
     def label_service_name_for_calculator(calculator)
