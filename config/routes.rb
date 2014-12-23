@@ -1,4 +1,12 @@
 Spree::Core::Engine.routes.draw do
+  namespace :admin do
+    resources :orders do
+      resources :return_authorizations do
+        resources :return_labels
+      end
+    end
+  end
+
   namespace :api do
     resources :orders do
       resources :return_authorizations do

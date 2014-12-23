@@ -36,7 +36,7 @@
   <ul>
     <% @return_authorization.return_labels.each do |label| %>
       <li>
-      <%= link_to "#{label.show_tracking_number} - #{distance_of_time_in_words_to_now(label.created_at)} ago", label.pdf_link %>
+      <%= link_to "#{label.show_tracking_number} - #{distance_of_time_in_words_to_now(label.created_at)} ago", admin_order_return_authorization_return_label_path(@order, @return_authorization, label, format: :pdf) %>
       </li>
     <% end %>
   </ul>
