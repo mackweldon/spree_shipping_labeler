@@ -22,7 +22,7 @@ module Spree
     end
 
     def return_filename
-      "Return filename"
+      "Return filename Goes Here"
     end
 
     def origin
@@ -30,7 +30,7 @@ module Spree
     end
 
     def destination
-      Spree::StockLocation.first
+      Spree::StockLocation.return_processing
     end
 
     def generate_label!
@@ -42,7 +42,7 @@ module Spree
     end
 
     def default_weight
-      16
+      16 # ounces, I hope
     end
   end
 end

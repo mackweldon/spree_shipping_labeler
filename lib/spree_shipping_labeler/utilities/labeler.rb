@@ -3,7 +3,6 @@
 #
 # Expects a Spree::Shipping::Package
 require 'fedex'
-require 'yaml'
 
 module Utilities
   class LabelError < Exception; end
@@ -63,50 +62,15 @@ module Utilities
     end
 
     def service_name
-      self.class.preferred_service_name
+      SpreeShippingLabeler::FedExConnection.service_name_mappings.fetch('Fedex::Ground')
     end
 
     #######################
     # Private Class Methods
     #######################
 
-    def self.preferred_service_name
-      service_name_mappings['Fedex::Ground']
-    end
-
-    def self.service_name_mappings
-      {
-        'Fedex::PriorityOvernight'     => 'PRIORITY_OVERNIGHT',
-        'Fedex::StandardOvernight'     => 'STANDARD_OVERNIGHT',
-        'Fedex::TwoDay'                => 'FEDEX_2_DAY',
-        'Fedex::ExpressSaver'          => 'FEDEX_EXPRESS_SAVER',
-        'Fedex::Ground'                => 'FEDEX_GROUND',
-        'Fedex::GroundHomeDelivery'    => 'GROUND_HOME_DELIVERY',
-        'Fedex::InternationalEconomy'  => 'INTERNATIONAL_ECONOMY',
-
-        'Usps::FirstClassMailParcels'  => 'First',
-        'Usps::PriorityMail'           => 'Priority',
-        'Usps::ExpressMailInternational' => 'ExpressMailInternational',
-      }
-    end
-
-    def self.connection_params
-      yamled_params = ::YAML.load_file('config/fedex_api.yml')
-      base_params   = yamled_params.fetch(connection_mode).symbolize_keys
-
-      base_params.merge({ mode: connection_mode })
-    end
-
     def self.fedex_connection
-      @fedex_conn_memo ||= ::Fedex::Shipment.new(connection_params)
-    end
-
-    def self.connection_mode
-      test_mode? ? 'test' : 'production'
-    end
-
-    def self.test_mode?
-      true
+      SpreeShippingLabeler::FedExConnection.connection
     end
   end
 end

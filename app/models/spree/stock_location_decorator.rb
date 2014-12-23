@@ -5,7 +5,7 @@ Spree::StockLocation.class_eval do
 
   def fedex_formatted
     {
-      company:       company,
+      company:       SpreeShippingLabeler::FedExConnection.company,
       phone_number:  phone,
       address:       [address1, address2].compact.join(' '),
       city:          city,
@@ -14,5 +14,10 @@ Spree::StockLocation.class_eval do
       country_code:  country && country.iso,
       residential:   !company.blank?,
     }
+  end
+
+  # Shipping destination for returns
+  def self.return_processing
+    first
   end
 end
