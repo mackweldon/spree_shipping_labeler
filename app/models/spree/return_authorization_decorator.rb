@@ -1,5 +1,3 @@
 Spree::ReturnAuthorization.class_eval do
-  def labels
-    %w[a b c d e f]
-  end
+  has_many :return_labels, class_name: "Spree::ReturnLabel"
 end

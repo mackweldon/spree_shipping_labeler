@@ -3,7 +3,7 @@ Spree::Core::Engine.routes.draw do
     resources :orders do
       resources :return_authorizations do
         member do
-          post :print_label
+          post :generate_return_label, to: 'shipping_labels#generate_return_label'
         end
       end
     end
