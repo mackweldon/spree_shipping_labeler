@@ -16,7 +16,10 @@ module Spree
     end
 
     def generate_label!
-      addressor.generate_label!
+      generated_label = addressor.generate_label!
+      self.pdf_text        = generated_label[:label]
+      self.tracking_number = generated_label[:tracking_number]
+      save!
     end
 
     def addressor

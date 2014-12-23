@@ -2,12 +2,14 @@
 # Connects to FedEx and pulls in a plaintext label.
 #
 # Expects a Spree::Shipping::Package
-#
+require 'fedex'
+require 'yaml'
+
 module Utilities
   class LabelError < Exception; end
 
   class Labeler
-    attr_reader :return_label
+    attr_reader :package
     def initialize(pkg=nil)
       @package = pkg
     end
@@ -16,26 +18,6 @@ module Utilities
     #
     def generate
       fedex_generate
-    end
-
-    def label_service_name_for_calculator(calculator)
-      name = calculator.type.gsub(/^Spree::Calculator::Shipping::/, '')
-
-      mappings = {
-        'Fedex::PriorityOvernight'     => 'PRIORITY_OVERNIGHT',
-        'Fedex::StandardOvernight'     => 'STANDARD_OVERNIGHT',
-        'Fedex::TwoDay'                => 'FEDEX_2_DAY',
-        'Fedex::ExpressSaver'          => 'FEDEX_EXPRESS_SAVER',
-        'Fedex::Ground'                => 'FEDEX_GROUND',
-        'Fedex::GroundHomeDelivery'    => 'GROUND_HOME_DELIVERY',
-        'Fedex::InternationalEconomy'  => 'INTERNATIONAL_ECONOMY',
-
-        'Usps::FirstClassMailParcels'  => 'First',
-        'Usps::PriorityMail'           => 'Priority', 
-        'Usps::ExpressMailInternational' => 'ExpressMailInternational', 
-      }
-
-      mappings.fetch(name)
     end
 
     #######################
@@ -65,9 +47,8 @@ module Utilities
           recipient:  package.destination.fedex_formatted,
           shipper:    package.origin.fedex_formatted,
           label_specification: {
-            image_type:       "ZPLII",
-            label_stock_type: "STOCK_4X6.75_LEADING_DOC_TAB",
-            filename:         nil
+            image_type:       "PDF",
+            filename:         package.return_filename,
           },
           service_type: service_name,
         })
@@ -82,26 +63,50 @@ module Utilities
     end
 
     def service_name
-      label_service_name_for_calculator(package.shipping_method.calculator)
+      self.class.preferred_service_name
     end
 
     #######################
     # Private Class Methods
     #######################
 
-    def self.fedex_connection
-      @fedex_conn_memo ||= ::Fedex::Shipment.new({
-        key:            Spree::ActiveShipping::Config[:fedex_key],
-        password:       Spree::ActiveShipping::Config[:fedex_password],
-        meter:          Spree::ActiveShipping::Config[:fedex_login],
-        account_number: Spree::ActiveShipping::Config[:fedex_account],
-        mode:           (test_mode? ? 'test' : 'production')
-      })
+    def self.preferred_service_name
+      service_name_mappings['Fedex::Ground']
     end
 
+    def self.service_name_mappings
+      {
+        'Fedex::PriorityOvernight'     => 'PRIORITY_OVERNIGHT',
+        'Fedex::StandardOvernight'     => 'STANDARD_OVERNIGHT',
+        'Fedex::TwoDay'                => 'FEDEX_2_DAY',
+        'Fedex::ExpressSaver'          => 'FEDEX_EXPRESS_SAVER',
+        'Fedex::Ground'                => 'FEDEX_GROUND',
+        'Fedex::GroundHomeDelivery'    => 'GROUND_HOME_DELIVERY',
+        'Fedex::InternationalEconomy'  => 'INTERNATIONAL_ECONOMY',
+
+        'Usps::FirstClassMailParcels'  => 'First',
+        'Usps::PriorityMail'           => 'Priority',
+        'Usps::ExpressMailInternational' => 'ExpressMailInternational',
+      }
+    end
+
+    def self.connection_params
+      yamled_params = ::YAML.load_file('config/fedex_api.yml')
+      base_params   = yamled_params.fetch(connection_mode).symbolize_keys
+
+      base_params.merge({ mode: connection_mode })
+    end
+
+    def self.fedex_connection
+      @fedex_conn_memo ||= ::Fedex::Shipment.new(connection_params)
+    end
+
+    def self.connection_mode
+      test_mode? ? 'test' : 'production'
+    end
 
     def self.test_mode?
-      !!Spree::ActiveShipping::Config[:test_mode]
+      true
     end
   end
 end
