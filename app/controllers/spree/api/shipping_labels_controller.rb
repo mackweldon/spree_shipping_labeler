@@ -6,7 +6,7 @@ module Spree
       def generate_return_label
         @rma   = @order.return_authorizations.find(params[:id])
         @label = @rma.return_labels.create!
-        binding.pry
+        redirect_to edit_admin_order_return_authorization_path(@order, @rma)
       end
 
       private
