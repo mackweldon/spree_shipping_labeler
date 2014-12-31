@@ -14,6 +14,8 @@ module SpreeShippingLabeler
       raise "No 'meter' passed to SpreeShippingLabeler::FedExConnection#config" if !params[:meter]
       raise "No 'account_number' passed in SpreeShippingLabeler::FedExConnection#config" if !params[:account_number]
       raise "No 'mode' passed in SpreeShippingLabeler::FedExConnection#config" if !params[:mode]
+
+      raise "Expected 'mode' setting to be either 'test' or 'production'" if !['test','production'].include?(params[:mode])
       @params = params
     end
 
