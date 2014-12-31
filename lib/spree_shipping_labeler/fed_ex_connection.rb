@@ -2,21 +2,26 @@ require 'yaml'
 
 module SpreeShippingLabeler
   module FedExConnection
+    attr_accessor :params
+
     def self.connection
       Fedex::Shipment.new(connection_params)
     end
 
-    def self.yamled_params
-      @yamled_params ||= ::YAML.load_file('config/fedex_api.yml')
+    def self.config params
+      raise "No 'key' passed to SpreeShippingLabeler::FedExConnection#config" if !params[:key]
+      raise "No 'password' passed to SpreeShippingLabeler::FedExConnection#config" if !params[:password]
+      raise "No 'meter' passed to SpreeShippingLabeler::FedExConnection#config" if !params[:meter]
+      raise "No 'account_number' passed in SpreeShippingLabeler::FedExConnection#config" if !params[:account_number]
+      raise "No 'mode' passed in SpreeShippingLabeler::FedExConnection#config" if !params[:mode]
+
+      raise "Expected 'mode' setting to be either 'test' or 'production'" if !['test','production'].include?(params[:mode])
+      @params = params
     end
 
     def self.connection_params
-      base = yamled_params.fetch(Rails.env).symbolize_keys
-
-      test_mode = !!base.delete(:test_mode)
-      mode_name = test_mode ? 'test' : 'production'
-
-      base.merge({ mode: mode_name })
+      raise "SpreeShippingLabeler::FedExConnection not configured!" if @params.nil?
+      @params
     end
 
     def self.company
@@ -38,6 +43,5 @@ module SpreeShippingLabeler
         'Usps::ExpressMailInternational' => 'ExpressMailInternational',
       }
     end
-
   end
 end
