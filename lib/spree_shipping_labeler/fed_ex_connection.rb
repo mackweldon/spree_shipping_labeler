@@ -11,16 +11,12 @@ module SpreeShippingLabeler
     end
 
     def self.connection_params
-      base_params = yamled_params.fetch(connection_mode).symbolize_keys
-      base_params.merge({ mode: connection_mode })
-    end
+      base = yamled_params.fetch(Rails.env).symbolize_keys
 
-    def self.connection_mode
-      test_mode? ? 'test' : 'production'
-    end
+      test_mode = !!base.delete(:test_mode)
+      mode_name = test_mode ? 'test' : 'production'
 
-    def self.test_mode?
-      ENV["FEDEX_TEST_MODE"] || (Rails.env.production? ? false : true)
+      base.merge({ mode: mode_name })
     end
 
     def self.company

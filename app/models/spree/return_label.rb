@@ -11,10 +11,6 @@ module Spree
       self.tracking_number || 'No tracking number available'
     end
 
-    def pdf_link
-      'http://fakelabel'
-    end
-
     def generate_label!
       generated_label = addressor.generate_label!
       self.pdf_text        = generated_label[:label]

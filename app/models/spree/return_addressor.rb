@@ -25,12 +25,32 @@ module Spree
       "Return filename Goes Here"
     end
 
-    def origin
-      order.shipping_address
+    def return_reason
+      rma.reason
     end
 
-    def destination
-      Spree::StockLocation.return_processing
+    def order_number
+      order.number
+    end
+
+    def rma_number
+      rma.number
+    end
+
+    def formatted_origin
+      order.shipping_address.fedex_formatted
+    end
+
+    def formatted_destination
+      base = Spree::StockLocation.return_processing.fedex_formatted
+      base.merge({
+        name: care_of
+      })
+    end
+
+    def care_of
+      base = SpreeShippingLabeler::FedExConnection.connection_params[:care_of]
+      base.blank? ? base : "co #{base}"
     end
 
     def generate_label!

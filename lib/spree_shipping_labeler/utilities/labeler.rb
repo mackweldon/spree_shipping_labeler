@@ -40,16 +40,23 @@ module Utilities
                 width:  package.width,
                 height: package.height,
                 units: "IN"
-              }
+              },
+              customer_references: [
+                { type: "CUSTOMER_REFERENCE", value: package.order_number },
+                { type: "RMA_ASSOCIATION",    value: package.rma_number },
+              ],
             }
           ],
-          recipient:  package.destination.fedex_formatted,
-          shipper:    package.origin.fedex_formatted,
+          recipient:  package.formatted_destination,
+          shipper:    package.formatted_origin,
           label_specification: {
             image_type:       "PDF",
             filename:         package.return_filename,
           },
           service_type: service_name,
+          shipping_options: {
+            return_reason: package.return_reason,
+          },
         })
       rescue Exception => err
         raise Utilities::LabelError, err.message
