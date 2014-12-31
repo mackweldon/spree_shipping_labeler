@@ -62,7 +62,7 @@ module Spree
     end
 
     def default_weight
-      16 # ounces, I hope
+      1.0 # pounds
     end
   end
 end
