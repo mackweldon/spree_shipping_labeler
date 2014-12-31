@@ -40,8 +40,13 @@
       </li>
     <% end %>
   </ul>
+  <br/>
 
+  <%= form_tag generate_return_label_api_order_return_authorization_path(@order, @return_authorization), url:  generate_return_label_api_order_return_authorization_path(@order, @return_authorization), method: :post, id: 'return-label-button' do |label_form| %>
+    <%= label_tag "Shipping Box" %>
+    <%= select_tag "spree_shipping_box_id", options_from_collection_for_select(Spree::Shipping::Box.all, :id, :description) %>
+    <div class="form-buttons filter-actions actions" data-hook="buttons">
+      <%= submit_tag Spree.t(:generate_new_label) %>
+    </div>
+  <% end %>
 </fieldset>
-<legend>
-  <%= button_to Spree.t(:generate_new_label), generate_return_label_api_order_return_authorization_path(@order, @return_authorization), method: :post, class: 'icon-print', id: 'return-label-button' %>
-</legend>

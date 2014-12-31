@@ -2,8 +2,12 @@ module Spree
   class ReturnLabel < ActiveRecord::Base
     after_create :generate_label!
 
+    attr_accessible :spree_shipping_box_id
+
     belongs_to :return_authorization
     has_one :order, through: :return_authorization
+
+    belongs_to :shipping_box, class_name: 'Spree::Shipping::Box', foreign_key: 'spree_shipping_box_id'
 
     default_scope { order "created_at desc" }
 

@@ -5,7 +5,7 @@ module Spree
 
       def generate_return_label
         @rma   = @order.return_authorizations.find(params[:id])
-        @label = @rma.return_labels.create!
+        @label = @rma.return_labels.create!(spree_shipping_box_id: params[:spree_shipping_box_id])
         redirect_to edit_admin_order_return_authorization_path(@order, @rma)
       end
 

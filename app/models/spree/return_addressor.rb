@@ -1,15 +1,16 @@
 module Spree
   class ReturnAddressor
-    attr_reader :rma, :order
+    attr_reader :rma, :order, :return_label
 
-    def initialize(rma_label)
-      @rma   = rma_label.return_authorization
-      @order = rma.order
+    def initialize(return_label)
+      @return_label = return_label
+      @rma          = return_label.return_authorization
+      @order        = rma.order
       self
     end
 
     def box
-      Spree::Shipping::Box.preferred_for_returns
+      return_label.shipping_box
     end
 
     def height; box.height; end
