@@ -2,7 +2,7 @@ require 'yaml'
 
 module SpreeShippingLabeler
   module FedExConnection
-    attr_accessor :params
+    attr_accessor :params, :company
 
     def self.connection
       Fedex::Shipment.new(connection_params)
@@ -16,6 +16,8 @@ module SpreeShippingLabeler
       raise "No 'mode' passed in SpreeShippingLabeler::FedExConnection#config" if !params[:mode]
 
       raise "Expected 'mode' setting to be either 'test' or 'production'" if !['test','production'].include?(params[:mode])
+
+      @company = params[:company]
       @params = params
     end
 
