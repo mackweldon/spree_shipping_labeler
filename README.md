@@ -1,5 +1,9 @@
 # What
-This is intended to be a [Spree](https://github.com/spree/spree) extension that pairs with `spree_active_shipping`. I'm not ready to set aside the time to build out a full extension at the moment but I did take a few minutes to extract the relevant code from my existing apps so that I'd have something to point to the next time I bring this up in #spree.
+This is intended to be a [Spree](https://github.com/spree/spree) extension that leverages the `fedex` gem to print RMA labels.
 
 ## Screenshot
-![screenshot](http://i.imgur.com/jR54udv.png)
+![screenshot](http://i.imgur.com/tj7EqUP.png)
+
+## install
+* Add `gem 'spree_shipping_labeler', github: 'dpritchett/spree_shipping_labeler', branch: '2-0-stable'` to your `Gemfile`.
+* ` rails g spree_shipping_labeler:install` to generate the migrations and seed the Shipping Box data.
