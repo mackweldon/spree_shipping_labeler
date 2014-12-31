@@ -58,7 +58,7 @@ module Spree
     end
 
     def labeler
-      Utilities::Labeler.new(self)
+      Utilities::FedExLabeler.new(self)
     end
 
     def default_weight

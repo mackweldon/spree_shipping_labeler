@@ -7,7 +7,7 @@ require 'fedex'
 module Utilities
   class LabelError < Exception; end
 
-  class Labeler
+  class FedExLabeler
     attr_reader :package
     def initialize(pkg=nil)
       @package = pkg
