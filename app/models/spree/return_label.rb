@@ -2,8 +2,6 @@ module Spree
   class ReturnLabel < ActiveRecord::Base
     after_create :generate_label!
 
-    attr_accessible :spree_shipping_box_id
-
     belongs_to :return_authorization
     has_one :order, through: :return_authorization
 
