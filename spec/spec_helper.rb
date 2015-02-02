@@ -1,39 +1,56 @@
-# load rails and other dependencies
-#
-ENV["RAILS_ENV"] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+# Setup simplecov first to make sure coverage happens through everything.
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/config/'
+  add_group 'Controllers', 'app/controllers'
+  add_group 'Helpers', 'app/helpers'
+  add_group 'Mailers', 'app/mailers'
+  add_group 'Models', 'app/models'
+  add_group 'Libraries', 'lib'
+  add_group 'Specs', 'spec'
+end
+
+# Configure Rails Environment
+ENV['RAILS_ENV'] = 'test'
+require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
 
-require 'capybara-screenshot/rspec'
+require 'database_cleaner'
+require 'factory_girl'
+FactoryGirl.find_definitions
+require 'ffaker'
+require 'shoulda-matchers'
 
-# spree test helpers
+# Requires supporting ruby files with custom matchers and macros, etc,
+# in spec/support/ and its subdirectories.
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
+
+# Requires factories defined in spree_core
 require 'spree/testing_support/factories'
-require 'spree/testing_support/controller_requests'
 require 'spree/testing_support/authorization_helpers'
+require 'spree/testing_support/capybara_ext'
+require 'spree/testing_support/url_helpers'
 
-# load supporting code
-Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
-
-# configure rspec
 RSpec.configure do |config|
-  Capybara.javascript_driver = :webkit
+  config.include FactoryGirl::Syntax::Methods
+  config.include Spree::TestingSupport::UrlHelpers
+  config.extend Spree::TestingSupport::AuthorizationHelpers::Request, :type => :feature # once spree updates this can be removed
+  config.color = true
 
-  config.order = 'random'
+  # Set to false for running JS drivers.
+  config.use_transactional_fixtures = false
 
-  # controller test setup
-  config.include Spree::TestingSupport::ControllerRequests, type: :controller
-  config.include Devise::TestHelpers, type: :controller
-  
-  # mocks
-  config.mock_with :rspec
+  config.before :each do
+    if example.metadata[:js]
+      DatabaseCleaner.strategy = :truncation
+    else
+      DatabaseCleaner.strategy = :transaction
+    end
+    DatabaseCleaner.start
+  end
 
-  # transactions
-  config.use_transactional_fixtures = true
-  config.use_transactional_examples = false
-
-  # database cleaner
-  config.before(:suite) { DatabaseCleaner.strategy = :transaction }
-  config.before(:each)  { DatabaseCleaner.start }
-  config.after(:each)   { DatabaseCleaner.clean }
+  config.after :each do
+    DatabaseCleaner.clean
+  end
 
 end

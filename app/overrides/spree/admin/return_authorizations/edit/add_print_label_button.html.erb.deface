@@ -1,0 +1,7 @@
+<!-- insert_before "code[erb-loud]:contains('order_tabs')"
+
+     enabled -->
+
+<% 'I would really like to have found a better selector to hook into here...' %>
+
+<%= render partial: 'print_label', :locals => { :current => 'Return Authorizations' } %>
