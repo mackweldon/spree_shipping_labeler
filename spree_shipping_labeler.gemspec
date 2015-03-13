@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
 
   s.name        = 'spree_shipping_labeler'
-  s.version     = '2.2.0'
+  s.version     = '2.3.0'
   s.authors     = ["Daniel Pritchett"]
   s.email       = 'dpritchett@gmail.com'
   s.homepage    = 'http://github.com/coroutine/spree_shipping_labeler'
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
 
-  s.add_dependency('spree_core',   '~> 2.2.0')
+  s.add_dependency('spree_core',   '~> 2.3.0')
   s.add_dependency('coffee-rails', '~> 4.0.0')
   s.add_dependency('fedex',        '~> 3.6.1')
 
