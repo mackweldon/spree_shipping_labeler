@@ -43,6 +43,7 @@
   <br/>
 
   <%= form_tag generate_return_label_api_order_return_authorization_path(@order, @return_authorization), url:  generate_return_label_api_order_return_authorization_path(@order, @return_authorization), method: :post, id: 'return-label-button' do |label_form| %>
+    <%= hidden_field_tag :token, spree_current_user.spree_api_key %>
     <%= label_tag "Shipping Box" %>
     <%= select_tag "spree_shipping_box_id", options_from_collection_for_select(Spree::Shipping::Box.all, :id, :description) %>
     <div class="form-buttons filter-actions actions" data-hook="buttons">
