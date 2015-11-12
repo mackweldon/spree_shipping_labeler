@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.require_paths = ["lib"]
 
-  s.add_dependency('spree_core',   '~> 2.3.0')
+  s.add_dependency('spree_core',   '~> 2.4.0')
   s.add_dependency('coffee-rails', '~> 4.0.0')
   s.add_dependency('fedex',        '~> 3.6.1')
 
